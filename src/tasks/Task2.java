@@ -6,6 +6,7 @@ import common.Task;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
 Задача 2
@@ -18,33 +19,10 @@ public class Task2 implements Task {
   private static List<Person> combineAndSortWithLimit(Collection<Person> persons1,
                                                       Collection<Person> persons2,
                                                       int limit) {
-    List<Person> sortedPersons1 = persons1.stream()
+    return Stream.concat(persons1.stream(), persons2.stream())
             .sorted(Comparator.comparing(Person::getCreatedAt))
             .limit(limit)
-            .collect(Collectors.toUnmodifiableList());
-    List<Person> sortedPersons2 = persons2.stream()
-            .sorted(Comparator.comparing(Person::getCreatedAt))
-            .limit(limit)
-            .collect(Collectors.toUnmodifiableList());
-
-    ArrayList<Person> result = new ArrayList<Person>(limit);
-    int i = 0;
-    int j = 0;
-
-    while (i < sortedPersons1.size() && j < sortedPersons2.size() && result.size() < limit){
-      result.add(sortedPersons1.get(i).getCreatedAt().compareTo(sortedPersons2.get(j).getCreatedAt()) <= 0 ?
-              sortedPersons1.get(i++) :  sortedPersons2.get(j++));
-    }
-
-    while (i < sortedPersons1.size() && result.size() < limit){
-      result.add(sortedPersons1.get(i++));
-    }
-
-    while (j < sortedPersons2.size() && result.size() < limit){
-      result.add(sortedPersons2.get(j++));
-    }
-
-    return result;
+            .collect(Collectors.toList());
   }
 
   @Override

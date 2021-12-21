@@ -22,11 +22,11 @@ public class Task1 implements Task {
   // Сложность 2*O(N)->O(N), расход по памяти O(N)
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
-    Map<Integer, Person> mappedPersons = persons.stream().collect(Collectors.toUnmodifiableMap(Person::getId, person -> person));
+    Map<Integer, Person> personsMap = persons.stream().collect(Collectors.toUnmodifiableMap(Person::getId, person -> person));
 
     return personIds.stream()
-            .filter(mappedPersons::containsKey)
-            .map(mappedPersons::get)
+            .filter(personsMap::containsKey)
+            .map(personsMap::get)
             .collect(Collectors.toList());
   }
 

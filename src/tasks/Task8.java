@@ -33,46 +33,21 @@ public class Task8 implements Task {
 
   //Для фронтов выдадим полное имя, а то сами не могут
   public static String convertPersonToString(Person person) {
-    StringBuffer result = new StringBuffer();
-    if (person.getSecondName() != null) {
-      result.append(person.getSecondName());
-    }
-
-    if (person.getFirstName() != null) {
-      result.append(" ");
-      result.append(person.getFirstName());
-    }
-
-    if (person.getMiddleName() != null) {
-      result.append(" ");
-      result.append(person.getMiddleName());
-    }
-    return result.toString();
+    List<String> fullName = Arrays.asList(person.getSecondName(), person.getFirstName(), person.getMiddleName());
+    return fullName.stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.joining(" "));
   }
 
   // словарь id персоны -> ее имя
   public static Map<Integer, String> getPersonNames(Collection<Person> persons) {
-    return persons.stream().collect(Collectors.toMap(Person::getId, Task8::convertPersonToString));
+    return persons.stream().
+            collect(Collectors.toMap(Person::getId, Task8::convertPersonToString, (left, right) -> left));
   }
 
   // есть ли совпадающие в двух коллекциях персоны?
   public static boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
-    if(persons1.size() > persons2.size()){
-      Set<Person> uniquePersons2 = new HashSet<>(persons2);
-      for(Person person : persons1){
-        if(uniquePersons2.contains(person)){
-          return true;
-        }
-      }
-    }else{
-      Set<Person> uniquePersons1 = new HashSet<>(persons1);
-      for(Person person : persons2){
-        if(uniquePersons1.contains(person)){
-          return true;
-        }
-      }
-    }
-    return false;
+    return !Collections.disjoint(persons1, persons2);
   }
 
   //...

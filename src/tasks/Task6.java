@@ -20,12 +20,12 @@ public class Task6 implements Task {
   private Set<String> getPersonDescriptions(Collection<Person> persons,
                                             Map<Integer, Set<Integer>> personAreaIds,
                                             Collection<Area> areas) {
-    Map<Integer, Area> mappedAreas = areas.stream().collect(Collectors.toUnmodifiableMap(Area::getId, area -> area));
+    Map<Integer, Area> areasMap = areas.stream().collect(Collectors.toUnmodifiableMap(Area::getId, area -> area));
     Set<String> result = new HashSet<>();
     for(Person person : persons){
         Set<Integer> areaIds = personAreaIds.get(person.getId());
         for(Integer areaId : areaIds){
-            result.add(person.getFirstName() + " - " + mappedAreas.get(areaId).getName());
+            result.add(person.getFirstName() + " - " + areasMap.get(areaId).getName());
         }
     }
     return result;
